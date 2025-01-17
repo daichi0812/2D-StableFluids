@@ -53,7 +53,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath){
     vertex = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex, 1, &vShaderCode, NULL);
     glCompileShader(vertex);
-    checkCompileErrors(vertex, "Vertex");
+    checkCompileErrors(vertex, "Vertex"); 
     
     // フラグメントシェーダーの作成
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
