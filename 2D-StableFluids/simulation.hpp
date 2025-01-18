@@ -19,8 +19,8 @@ private:
     int size;   // グリッドのサイズ
     std::vector<float> x;   // x方向の速度
     std::vector<float> y;   // y方向の速度
-    std::vector<float> x_prev   // 前ステップのx方向の速度
-    std::vector<float> y_prev   // 前ステップのy方向の速度
+    std::vector<float> x_prev;   // 前ステップのx方向の速度
+    std::vector<float> y_prev;   // 前ステップのy方向の速度
     std::vector<float> dens;    // 密度（色の濃さ）
     std::vector<float> dens_prev;   // 前ステップの密度（色の濃さ）
     
