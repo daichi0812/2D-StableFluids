@@ -1,9 +1,10 @@
 //
-//  shader.h
+//  shader.hpp
 //  2D-StableFluids
 //
 //  Created by 堀田大智 on 2025/01/17.
 //
+// Shaderクラスの定義を行う。 定義を.hにすることで二重定義を防ぐ
 
 // 「#ifndef」: 定義されていなければコンパイルする
 #ifndef SHADER_H

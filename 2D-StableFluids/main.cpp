@@ -5,7 +5,7 @@
 //  Created by 堀田大智 on 2025/01/17.
 //
 
-#include "shader.h"
+#include "shader.hpp"
 
 int main()
 {

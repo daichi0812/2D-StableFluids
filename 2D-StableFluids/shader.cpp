@@ -6,7 +6,7 @@
 //  Shader クラスの実装を行う
 //  シェーダーの読み込み、コンパイル、リンク、および使用を簡単を行うためのクラス
 
-#include "shader.h"
+#include "shader.hpp"
 
 // Shader クラスの実装
 Shader::Shader(const char* vertexPath, const char* fragmentPath){
