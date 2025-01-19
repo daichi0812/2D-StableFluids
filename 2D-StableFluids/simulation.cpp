@@ -59,6 +59,7 @@ Simulation::~Simulation(){
 // N: グリットサイズ
 // u, v: マウスの動く方向に働く力（速度）
 void Simulation::add_force(int X, int Y, int N, float u, float v){
+    std::cout << "This is add_force function" << std::endl;
     if (X <= 0 || X > N || Y <= 0 || Y > N){
         throw std::out_of_range("Index is  out of range.");
     }
@@ -128,8 +129,8 @@ void Simulation::diffuse(int N, int b, std::vector<float>& x, std::vector<float>
     float a = dt * diff * N * N;    // 粘性係数ν, Δt, 1 /Δx^2 をまとめたもの
     for (k = 0; k < 25; ++k){   // ガウス・ザイデル法の反復回数
         // 全てのセルに対して行う
-        for (int i = 1; i <= N; ++i){
-            for (int j = 1; j <= N; ++j){
+        for (i = 1; i <= N; ++i){
+            for (j = 1; j <= N; ++j){
                 // 拡散方程式を陰的な評価で離散化
                 x[IX(i, j)] = (x0[IX(i, j)] + a * (x[IX(i - 1, j)] + x[IX(i + 1, j)] +
                                                    x[IX(i, j -1)] + x[IX(i, j + 1)])) / (1 + 4 * a);

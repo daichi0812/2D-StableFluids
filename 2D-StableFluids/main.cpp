@@ -172,7 +172,7 @@ int main()
     }
 
     // Shader オブジェクトの作成
-    Shader myShader("./textureshader.vs", "./textureshader.fs");
+    Shader myShader("/Users/daichi/Documents/DevHub/CG/2D-StableFluids/2D-StableFluids/textureshader.vs", "/Users/daichi/Documents/DevHub/CG/2D-StableFluids/2D-StableFluids/textureshader.fs");
     
     // テクスチャの生成
     unsigned int screen_tex;

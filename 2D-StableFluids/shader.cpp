@@ -96,12 +96,12 @@ void Shader::setFloat(const std::string &name, float value) const {
 void Shader::checkCompileErrors(unsigned int shader, std::string type){
     int success;
     char infoLog[1024];
-    if(type != "PROGRAM"){
+    if(type != "Program"){
         // シェーダーのコンパイルエラーをチェック
         glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
         if(!success){
             glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-            std::cout << "Error: Shader_Compipation_Error of type: " << type << "\n" << infoLog << "\n ---" << std::endl;
+            std::cout << "Error: Shader_Comparison_Error of type: " << type << "\n" << infoLog << "\n ---" << std::endl;
         }
     } else {
         // プログラムのリンクエラーをチェック
