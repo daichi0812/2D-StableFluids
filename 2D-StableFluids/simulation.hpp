@@ -40,20 +40,23 @@ public:
     // デストラクタ
     ~Simulation();  // リソースの解放
     
-    //  ソース項の加算
-    void add_source(int N, std::vector<float>& x, std::vector<float>& s, float dt);
-    
     /**
      * 外力項の加算
      * X, Y: クリックした座標、N: グリッドサイズ、u, v: マウスの動く方向に力の大きさ
      */
     void add_force(int X, int Y, int N, float u, float v);
     
+    //  ソース項の加算
+    void add_source(int N, std::vector<float>& x, std::vector<float>& s, float dt);
+    
     // 拡散処理
-    void diffuse(int N, std::vector<float>& x, std::vector<float>& x0, float diff, float dt);
+    void diffuse(int N, int b, std::vector<float>& x, std::vector<float>& x0, float diff, float dt);
     
     // 移流処理
     void advect(int N, int b, std::vector<float>& d, std::vector<float>& d0, std::vector<float>&u, std::vector<float>& v, float dt);
+    
+    // 投影処理
+    void project(int N, std::vector<float>& u, std::vector<float>& v, std::vector<float>& p, std::vector<float>& div);
     
     // 境界条件の設定
     void set_bnd(int N, int b, std::vector<float>& x);
@@ -64,10 +67,7 @@ public:
     void dens_step(int N, std::vector<float>& x, std::vector<float>& x0, std::vector<float>& u, std::vector<float>& v, float diff, float dt);
     
     // 速度の更新
-    void vel_step(int N, std::vector<float>& u, std::vector<float>& v, std::vector<float>& u0, std::vector<float>& v0, visc, float dt);
-    
-    // 投影処理
-    void project(int N, std::vector<float>& u, std::vector<float>& v, std::vector<float> p, std::vector<float>& div);
+    void vel_step(int N, std::vector<float>& u, std::vector<float>& v, std::vector<float>& u0, std::vector<float>& v0, float visc, float dt);
     
     // シミュレーションの全体的な更新
     void update(int N, float dt);
@@ -83,4 +83,4 @@ public:
     
     // シンク（色の除去）
     void sink(int X, int Y, int W, int H, int N);
-}
+};
