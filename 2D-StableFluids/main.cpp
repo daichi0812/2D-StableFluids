@@ -256,6 +256,10 @@ int main()
                 // マウス位置をグリッド座標に変換
                 int i = (int)((my / (float)size) * N + 1);
                 int j = (int)((mx / (float)size) * N + 1);
+            
+                std::cout << "Mouse Position (mx, my): " << mx << ", " << my << std::endl;
+                std::cout << "Grid Position (i, j): " << i << ", " << j << std::endl;
+            
                 // シミュレーションに力を追加
                 sim->add_force(i, j, N, force * (mx - omx), force * (my - omy));
                 // 前回のマウス位置を更新

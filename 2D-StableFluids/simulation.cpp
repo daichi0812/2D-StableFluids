@@ -69,7 +69,7 @@ void Simulation::add_force(int X, int Y, int N, float u, float v){
 }
 
 // 全てのセルに対して、外部からの影響を時間ステップに基づいて加算する
-void Simulation::add_source(int N, std::vector<float> &x, std::vector<float> &s, float dt){
+void Simulation::add_source(int N, std::vector<float>& x, std::vector<float>& s, float dt){
     for (int i = 0; i < size; ++i){
         x[i] += dt * s[i];  // 各セルにソース項を加算
     }
@@ -127,7 +127,7 @@ void Simulation::advect(int N, int b, std::vector<float>& d, std::vector<float>&
 void Simulation::diffuse(int N, int b, std::vector<float>& x, std::vector<float>& x0, float diff, float dt){
     int i, j, k;
     float a = dt * diff * N * N;    // 粘性係数ν, Δt, 1 /Δx^2 をまとめたもの
-    for (k = 0; k < 25; ++k){   // ガウス・ザイデル法の反復回数
+    for (k = 0; k < 20; ++k){   // ガウス・ザイデル法の反復回数
         // 全てのセルに対して行う
         for (i = 1; i <= N; ++i){
             for (j = 1; j <= N; ++j){
@@ -162,7 +162,7 @@ void Simulation::project(int N, std::vector<float>& u, std::vector<float>& v, st
     set_bnd(N, 0, p);   // 圧力場に境界条件を適用
     
     // ポアソン方程式をガウス・ザイデル法で反復的にとく
-    for (k = 0; k < 20; ++k){
+    for (k = 0; k < 40; ++k){
         for (i = 1; i <= N; ++i){
             for (j = 1; j <= N; ++j){
                 p[IX(i, j)] = (div[IX(i, j)] + p[IX(i - 1, j)] + p[IX(i + 1, j)] +
@@ -202,30 +202,31 @@ void Simulation::set_bnd(int N, int b, std::vector<float>& x){
 
 // 速度の更新
 void Simulation::vel_step(int N, std::vector<float> &u, std::vector<float> &v, std::vector<float> &u0, std::vector<float> &v0, float visc, float dt){
-    // add_forceで更新された u0, v0 を次の時間ステップの u, v に反映
+    // Step1: add_forceで更新された u0, v0 を次の時間ステップの u, v に反映
     add_source(N, u, u0, dt);
     add_source(N, v, v0, dt);
     
-    // x方向の移流処理
-    advect(N, 1, u, u0, u0, v0, dt);
-    // y方向の移流処理
-    advect(N, 2, v, v0, u0, v0, dt);
-    
+    // step1で得た新しい値(u, v)をstep2の(u0, v0)として扱いたい
     std::swap(u0, u);
     std::swap(v0, v);
     
-    // x方向の拡散処理
+    // Step2: Advect(移流処理)
+    advect(N, 1, u, u0, u0, v0, dt);    // x方向
+    advect(N, 2, v, v0, u0, v0, dt);    // y方向
+    
+    // Advectしたら一旦非圧縮にしときたい（速度場の投影）
+    project(N, u, v, u0, v0);
+    
+    // step2で得た新しい値(u, v)をstep3の(u0, v0)として扱いたい
+    std::swap(u0, u);
+    std::swap(v0, v);
+    
+    // Step3: Diffuse(粘性の扱い)
     diffuse(N, 1, u, u0, visc, dt);
     // y方向の拡散処理
     diffuse(N, 2, v, v0, visc, dt);
     
-    // 速度場の投影
-    project(N, u, v, u0, v0);
-    
-    std::swap(u0, u);
-    std::swap(v0, v);
-    
-    // 再度投影
+    // Step4: Project(投影)
     project(N, u, v, u0, v0);
 }
 
@@ -254,10 +255,10 @@ std::vector<float> Simulation::getDensity(int N){
             amal.push_back(std::max(r[k], 0.0f));   // 赤色成分(最低0)
             amal.push_back(g[k]);    // 緑色成分
             amal.push_back(b[k]);   // 青色成分
-            total += r[k] + g[k] + b[k];    // 合計値（デバッグ用コメント）
+//            total += r[k] + g[k] + b[k];    // 合計値（デバッグ用コメント）
         }
     }
-    std::cout << total << std::endl;    // 合計値の出力（デバッグ用コメント）
+//    std::cout << "合計: " << total << std::endl;    // 合計値の出力（デバッグ用コメント）
     
     return amal;    // 結果を返す
 }
